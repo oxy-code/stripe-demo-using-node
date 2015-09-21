@@ -12,6 +12,14 @@ exports.index = function(req, res) {
 	});
 };
 
+// Get list of stripe transacton
+exports.stripe = function(req, res) {
+	Stripe.find(function (err, transactons) {
+		if(err) { return handleError(res, err); }
+		return res.json(200, transactons);
+	});
+};
+
 // Get a single user
 exports.show = function(req, res) {
 	User.findById(req.params.id, function (err, user) {
@@ -71,8 +79,17 @@ exports.login = function(req, res) {
 	User.findOne({email: user.email, password: user.password}, function(err, user){
 		if (err) {return handleError(err, res);}
 		if(!user) { return res.json(500, {message : 'Email or password is wrong!'}); }
-		// Need to setup a token https://auth0.com/docs/quickstart/spa/angularjs/nodejs#additional-information
+		if (user.role !== 'ADM') { return res.json(500, {message : 'Sorry you must use admin credentials!'}); }
+		req.session.token = user.id + new Date().getTime();
+		req.session.profile = user;
+		return res.json(200, {message: 'Login successfull', profile: user, token:req.session.token});
 	});
+};
+
+exports.logout = function(req, res){
+	delete req.session.token;
+	delete req.session.profile;
+	return res.json(200);
 };
 
 

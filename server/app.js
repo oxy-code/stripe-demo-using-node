@@ -21,6 +21,10 @@ mongoose.connect(config.mongo.uri, config.mongo.options);
 var app = express();
 var server = require('http').createServer(app);
 var jwt = require('express-jwt');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+app.use(cookieParser());
+app.use(session({key:"sample.sid", secret: 'Pi{T~$eo=T^Y(O52O%`JgSyNAn;xFuvJ,__jT) kMYkKqQQ)>uWU$y<~4tXM(GQ4'}));
 
 var jwtCheck = jwt({
   secret: new Buffer('fCjBbZA3L27r7bqOVD7td5NUTv9NHNgF2ygWYCT4Je4P7C9hAw2tJo6rpa2r3Xlk', 'base64'),
