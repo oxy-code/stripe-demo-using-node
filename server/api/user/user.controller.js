@@ -28,11 +28,11 @@ exports.create = function(req, res) {
 		name: reqData.name,
 		email: reqData.email,
 		password: reqData.password,
-		role: 'ADM'
+		role: 'USR'
 	};
 	var stripe = require('stripe')("sk_test_umAUtcHhZh6oX8MkmVuCRrtH");
 	stripe.charges.create({
-	  amount: 1000,
+	  amount: 100,
 	  currency: "usd",
 	  source: {
 	  	object: 'card',
